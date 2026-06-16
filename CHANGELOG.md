@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0-beta.1
+
+### Added
+
+- Released Forge version of the mod, matching all features of the Fabric version.
+- Configurable **Player Shadow**: Spawns a Zombie at the player's death location, wearing the player's armor and weapons (safe from duplication with 0% drop rate).
+- Configurable **Dimensional Rift**:
+  - Generates cosmetic, low-survival-utility cracks (Cracked stone bricks, Cracked deepslate bricks/tiles, Cracked nether bricks, Cracked polished blackstone bricks, Basalt, Tuff, Coarse Dirt, Gravel) on return around the checkpoint.
+  - Rift size and density expands gradually with subsequent deaths at the same checkpoint.
+  - Automatically and smartly reverts rift blocks back to their original states upon checkpoint reset/update, ignoring any coordinates broken/changed by the player.
+
 ## 0.1.0-beta.1
 
 Initial public beta for Minecraft 1.21.1 Fabric.

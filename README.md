@@ -1,19 +1,53 @@
 # ReviveByDeath
 
-ReviveByDeath is a Fabric mod for Minecraft 1.21.1 that replaces fatal moments with a short cinematic rewind sequence, then restores the player to their latest safe checkpoint.
+ReviveByDeath is a Minecraft 1.21.1 mod available for both **Fabric** and **Forge** that replaces fatal moments with a short, cinematic rewind sequence, restoring the player to their latest safe checkpoint.
 
 All visual and audio assets in this project are original placeholders/custom assets. Do not add copyrighted anime, game, movie, logo, quote, or sound content unless you have explicit rights to use and monetize it.
 
+---
+
 ## Requirements
 
-- Minecraft 1.21.1
-- Fabric Loader 0.19.3 or newer
-- Fabric API
-- Java 21
+- **Minecraft**: `1.21.1`
+- **Fabric Version**: Requires Fabric Loader `0.19.3` or newer and Fabric API.
+- **Forge Version**: Requires Forge `52.1.0` or newer.
+- **Java**: `21`
 
 ReviveByDeath is required on both client and server.
 
-The server controls checkpoints, XP costs, activation requirements, and revive logic. The client is required for the cutscene PNG sequence, screen overlay, client-side particles, and cutscene audio handling.
+---
+
+## Features
+
+### 1. Cinematic death rewind cutscene
+If the player meets the revive requirements, death is interrupted, a short cutscene plays, and the player returns to their latest safe checkpoint.
+
+### 2. "Cái bóng quá khứ" (Player Shadow)
+When the rewind sequence starts, a custom Zombie representing the player's shadow spawns at the death location:
+- Equipped with the exact armor and weapons the player was holding/wearing.
+- Custom-named `<Player>'s Shadow` with permanent Speed II, Strength I, and Glowing for 10 seconds.
+- Drop rate set to `0.0F` to prevent duplication of gear.
+- Can be toggled on/off in the configuration (`spawnPastShadow`).
+
+### 3. "Vết nứt không gian" (Dimensional Rift)
+When returning to the checkpoint, a cosmic rift/timeline fracture cracks the floor blocks around it:
+- **Low Survival Utility**: Avoids high-value blocks like Crying Obsidian or Sculk. Replaces common floor blocks with low-utility equivalents:
+  - `Stone Bricks` -> `Cracked Stone Bricks`
+  - `Deepslate Bricks` -> `Cracked Deepslate Bricks`
+  - `Deepslate Tiles` -> `Cracked Deepslate Tiles`
+  - `Nether Bricks` -> `Cracked Nether Bricks`
+  - `Polished Blackstone Bricks` -> `Cracked Polished Blackstone Bricks`
+  - `Logs / Planks` (Wood) -> `Basalt` (charred log appearance)
+  - `Stone / Cobblestone` -> `Tuff`
+  - `Grass / Dirt` -> `Coarse Dirt`
+  - `Sand` -> `Gravel`
+  - Fallback -> `Tuff`
+- **Gradual Expansion**: The rift grows in radius and density if the player repeatedly dies and returns to the same active checkpoint.
+- **Smart Reversion & No Conflict**: When the checkpoint is reset (e.g. setting a new checkpoint, sleeping in a bed, true vanilla death, or admin command), all rift blocks automatically revert back to their original states. If a player has broken or modified a block in the meantime, the mod is smart enough to leave it alone.
+- Includes visual Portal particles/crumbling sound on crack placement, and Witch particles/clock chime sound right before reversion.
+- Can be toggled on/off in the configuration (`createDimensionalRift`).
+
+---
 
 ## Activation Modes
 
@@ -24,103 +58,43 @@ The server controls checkpoints, XP costs, activation requirements, and revive l
 - `both`: Allows either Death Rewind armor or a totem. Armor enchantment is checked first, so a player wearing Death Rewind will not consume a totem.
 - `always`: No item requirement. Useful for testing or showcases, not recommended for balanced survival.
 
+---
+
 ## Death Rewind Enchantment
 
-Death Rewind is a level 1 armor enchantment.
-
-It is available through vanilla-style progression:
-
+Death Rewind is a level 1 armor enchantment available through vanilla-style progression:
 - Enchanting table, because it is tagged as `minecraft:non_treasure`.
 - Villager trading, because it is tagged as `minecraft:tradeable`.
 - OP test command: `/revivebydeath give_book`.
 
 Only one equipped armor piece needs the enchantment to activate rewind.
 
+---
+
 ## Checkpoints
 
-The server automatically tracks each player's latest safe checkpoint.
-
-A checkpoint is saved only when the player is:
-
+The server automatically tracks each player's latest safe checkpoint. A checkpoint is saved only when the player is:
 - alive;
 - on the ground;
 - not in lava, fire, or the void;
 - standing on a sturdy non-liquid block;
 - in enough open space for feet and head.
 
-Players can also click a bed during day or night to manually save a checkpoint at their current safe position.
+Players can also right-click a bed during day or night to manually save a checkpoint.
 
-After a checkpoint exists, automatic checkpoint checks are spaced by `checkpointRecheckTicks`. The default is `6000` ticks, about 5 minutes.
+---
 
 ## XP Cost
 
 When `useXpCost` is true, enchantment and `always` rewinds cost XP levels. Totem rewinds consume the totem instead, so they can still work when the player does not have enough XP.
 
-Default balance:
-
-```json
-"minimumXpLevelCost": 6,
-"xpLevelCostIncrease": 2,
-"xpLevelCostMultiplier": 1.18
-```
-
 The cost resets when the player sleeps if `resetCostOnSleep` is true. It also resets after a normal death if `resetCostOnDeath` is true.
 
-## Cutscene
-
-The included cutscene uses a PNG sequence at:
-
-```text
-assets/revivebydeath/textures/cutscene/heart_grasp_0000.png
-```
-
-Current timing defaults:
-
-```json
-"enableCutscene": true,
-"cutsceneIntroFadeTicks": 4,
-"cutsceneTicks": 32,
-"cutsceneFrames": 50,
-"returnEffectTicks": 14,
-"postReviveInvulnerabilityTicks": 60
-```
-
-Set `enableCutscene` to `false` to skip the cinematic delay. The rewind logic still works, but the player is restored almost immediately.
-
-During the cinematic, most environment sound categories are muted client-side so weather, mobs, and ambience do not cover the custom cutscene audio. Player sound is not muted, so the initial damage sound can still be heard.
-
-## Commands
-
-Player command:
-
-```mcfunction
-/revivebydeath status
-/revivebydeath log on
-/revivebydeath log off
-```
-
-`log on` enables per-player debug messages that explain why rewind did not trigger, such as missing checkpoints, unsafe checkpoints, or failed activation requirements.
-
-OP-only commands:
-
-```mcfunction
-/revivebydeath mode always
-/revivebydeath mode totem
-/revivebydeath mode enchantment
-/revivebydeath mode both
-/revivebydeath cutscene on
-/revivebydeath cutscene off
-/revivebydeath give_book
-/revivebydeath reset_cost
-```
+---
 
 ## Configuration
 
-Server config path:
-
-```text
-config/revivebydeath.json
-```
+Server config path: `config/revivebydeath.json`
 
 Recommended default:
 
@@ -143,39 +117,60 @@ Recommended default:
   "returnEffectTicks": 14,
   "postReviveInvulnerabilityTicks": 60,
   "checkpointInitialCheckTicks": 10,
-  "checkpointRecheckTicks": 6000
+  "checkpointRecheckTicks": 6000,
+  "spawnPastShadow": true,
+  "createDimensionalRift": true
 }
 ```
 
-## Test Checklist
+---
 
-- Build with `.\gradlew.bat build`.
-- Install the mod on both client and server.
-- Test `activationMode` values: `enchantment`, `totem`, `both`, and `always`.
-- Test deaths from fall damage, mobs, lava, fire, and void.
-- Confirm the player returns to the latest safe checkpoint only when activation and XP cost pass.
-- Confirm vanilla death screen appears normally when rewind requirements are not met.
-- Confirm `/revivebydeath status` works for players and OP-only commands require permission level 2.
-- Confirm `/revivebydeath log on` works for normal players and prints useful failure reasons.
-- Test `enableCutscene: false` for players who want immediate rewind.
+## Commands
 
-## Known Notes
+Player commands:
+```mcfunction
+/revivebydeath status
+/revivebydeath log on
+/revivebydeath log off
+```
 
-- The mod is designed for client and server installation.
-- `always` activation mode is intentionally powerful and best kept for testing.
-- If the cutscene is disabled, gameplay still works without the visual delay.
+OP-only commands:
+```mcfunction
+/revivebydeath mode always
+/revivebydeath mode totem
+/revivebydeath mode enchantment
+/revivebydeath mode both
+/revivebydeath cutscene on
+/revivebydeath cutscene off
+/revivebydeath give_book
+/revivebydeath reset_cost
+```
 
-## Build
+---
 
+## Build & Project Structure
+
+The project is split into two modules:
+- `/fabric`: The Fabric loader implementation.
+- `/forge`: The Forge loader implementation.
+
+To compile each version, go into its directory and run the gradle wrapper:
+
+For Fabric:
 ```powershell
-.\gradlew.bat build
+cd fabric
+.\gradlew.bat clean build
 ```
 
-The built jar is written to:
-
-```text
-build/libs/revivebydeath-<version>.jar
+For Forge:
+```powershell
+cd forge
+.\gradlew.bat clean build
 ```
+
+The compiled jars are located under `<module>/build/libs/`.
+
+---
 
 ## License
 

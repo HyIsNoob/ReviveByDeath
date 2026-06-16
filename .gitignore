@@ -1,6 +1,9 @@
 # gradle
 
 .gradle/
+.gradle-user-home/
+.vscode/
+.github/
 build/
 out/
 classes/
