@@ -22,14 +22,14 @@ ReviveByDeath is required on both client and server.
 ### 1. Cinematic death rewind cutscene
 If the player meets the revive requirements, death is interrupted, a short cutscene plays, and the player returns to their latest safe checkpoint.
 
-### 2. "Cái bóng quá khứ" (Player Shadow)
+### 2. Player Shadow
 When the rewind sequence starts, a custom Zombie representing the player's shadow spawns at the death location:
 - Equipped with the exact armor and weapons the player was holding/wearing.
 - Custom-named `<Player>'s Shadow` with permanent Speed II, Strength I, and Glowing for 10 seconds.
 - Drop rate set to `0.0F` to prevent duplication of gear.
 - Can be toggled on/off in the configuration (`spawnPastShadow`).
 
-### 3. "Vết nứt không gian" (Dimensional Rift)
+### 3. Dimensional Rift
 When returning to the checkpoint, a cosmic rift/timeline fracture cracks the floor blocks around it:
 - **Low Survival Utility**: Avoids high-value blocks like Crying Obsidian or Sculk. Replaces common floor blocks with low-utility equivalents:
   - `Stone Bricks` -> `Cracked Stone Bricks`
