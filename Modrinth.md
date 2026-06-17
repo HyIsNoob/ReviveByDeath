@@ -1,16 +1,17 @@
 # ReviveByDeath
 
-ReviveByDeath is a Minecraft 1.21.1 mod (available for both **Fabric** and **Forge**) that replaces the normal, sudden death screen with a dramatic, cinematic rewind sequence. When a player suffers fatal damage and meets the configured requirements, time rewinds, a custom cutscene plays, and the player is safely teleported back to their latest safe checkpoint.
+ReviveByDeath is a Minecraft 1.21.1 mod (available now for both **Fabric** and **Forge**) that replaces the normal, sudden death screen with a dramatic, cinematic rewind sequence. When a player suffers fatal damage and meets the configured requirements, rewinds, a custom cutscene plays, and the player is safely teleported back to their latest safe checkpoint.
 
-This mod is designed from the ground up for balanced survival gameplay, multiplayer servers, and hardcore modpacks, offering deep customization, scaling progression costs, and visual timeline effects.
+This mod is designed from the ground up for balanced survival gameplay, multiplayer servers, and hardcore modpacks, offering scaling progression costs, and visual timeline effects.
 
+![Cutscene](https://cdn.modrinth.com/data/cached_images/6b449f70ee09dfeb680cde20d2e54a5a0d72ca70_0.webp)
 ---
 
 ## Features
 
 - **Cinematic Death Rewind**: Interrupts fatal damage with a customized sequence, rendering a client-side cutscene overlays and muting ambient noise.
 - **Automatic Checkpoint Tracker**: Continuously checks and saves safe locations for each player.
-- **Manual Bed Checkpoints**: Right-clicking a bed at any time of day or night registers an immediate safe checkpoint.
+- **Manual Bed Checkpoints**: Right-clicking a bed at day or night registers an immediate safe checkpoint.
 - **Death Rewind Armor Enchantment**: Survival-friendly enchantment that triggers the rewind.
 - **Multiple Activation Modes**: Supports `enchantment`, `totem`, `both`, and `always` modes to fit any playstyle.
 - **Scaling XP Level Costs**: Penalizes repeated rewinds by increasing the XP level cost, which resets when sleeping or dying normally.
@@ -21,7 +22,7 @@ This mod is designed from the ground up for balanced survival gameplay, multipla
 
 ---
 
-## Detailed Mechanics
+## Details
 
 ### 1. Checkpoint System
 
@@ -36,7 +37,7 @@ A location is saved as a checkpoint only if the player is:
 
 #### Saving Triggers:
 - **Automatic**: The server performs checks at configurable intervals (default: every 5 minutes/6000 ticks if a checkpoint is active; every 0.5 seconds/10 ticks if looking for the first safe checkpoint).
-- **Manual (Beds)**: Right-clicking any bed at any time (day or night) immediately attempts to save a manual checkpoint at the player's safe position, displaying a confirmation message.
+- **Manual (Beds)**: Right-clicking any bed at any time immediately attempts to save a manual checkpoint at the player's safe position, displaying a confirmation message.
 
 ---
 
@@ -47,7 +48,7 @@ The mod's behavior depends on the configured `activationMode` in `config/reviveb
 - **`enchantment`**: Requires at least one equipped piece of armor enchanted with **Death Rewind**.
 - **`totem`**: Requires holding a Totem of Undying in either the main hand or off-hand.
 - **`both`**: Allows either Death Rewind armor or a totem to trigger the rewind. The mod checks armor first: if the player wears enchanted armor but does not have enough XP levels, it automatically falls back to consuming a totem.
-- **`always`**: Rewinds are always active on death, requiring no items or enchantments. Ideal for creative showcases or testing.
+- **`always`**: Rewinds are always active on death, requiring no items or enchantments, but cost xp. Ideal for creative showcases or testing.
 
 ---
 
@@ -62,7 +63,6 @@ The mod's behavior depends on the configured `activationMode` in `config/reviveb
 ### 4. XP Cost Scaling
 
 To balance the safety of the rewind, XP-based modes (`enchantment` and `always`) charge the player XP levels. 
-*(Note: Totem-based rewinds consume the totem instead and are exempt from XP checks).*
 
 - **Cost Formula**: The level cost grows with each successful rewind. By default, it starts at 6 levels and scales up based on the number of rewinds used:
   $$\text{XP Level Cost} = (\text{minimumXpLevelCost} + \text{uses} \times \text{xpLevelCostIncrease}) \times \text{xpLevelCostMultiplier}^{\text{uses}}$$
@@ -76,7 +76,7 @@ To balance the safety of the rewind, XP-based modes (`enchantment` and `always`)
 
 ### 5. Player Shadow
 
-To represent the player's "past self" left behind in the timeline, a custom **Zombie** is spawned at the exact coordinates of death when a rewind is triggered:
+To represent the player's "past self" left behind in the timeline, a **Zombie** is spawned at the coordinates of death when a rewind is triggered:
 - **Equipment**: Copies the exact armor and hand items the player held/wore at the moment of death.
 - **Properties**: Custom-named `<Player Name>'s Shadow`, and given permanent **Speed II** and **Strength I** effects, and a 10-second **Glowing** effect for easy tracking.
 - **Balancing**: Equipment drop rates are set to `0.0F` (0%) to prevent players from duplicating gear by slaying their own shadow. No player XP is retained by the shadow.
@@ -89,16 +89,16 @@ When a player teleports back to their checkpoint, a rift in the timeline appears
 
 #### Block Mapping (Low-Survival-Utility):
 To prevent players from obtaining rare resources or XP farms (e.g. from Crying Obsidian or Sculk), the rift uses safe, decorative blocks with very low survival value:
-- `Stone Bricks` $\rightarrow$ `Cracked Stone Bricks`
-- `Deepslate Bricks` $\rightarrow$ `Cracked Deepslate Bricks`
-- `Deepslate Tiles` $\rightarrow$ `Cracked Deepslate Tiles`
-- `Nether Bricks` $\rightarrow$ `Cracked Nether Bricks`
-- `Polished Blackstone Bricks` $\rightarrow$ `Cracked Polished Blackstone Bricks`
-- `Logs / Planks` (Wood) $\rightarrow$ `Basalt` (charred log appearance)
-- `Stone / Cobblestone` $\rightarrow$ `Tuff`
-- `Grass / Mycelium / Dirt` $\rightarrow$ `Coarse Dirt`
-- `Sand` $\rightarrow$ `Gravel`
-- Others $\rightarrow$ `Tuff`
+- `Stone Bricks` to `Cracked Stone Bricks`
+- `Deepslate Bricks` to `Cracked Deepslate Bricks`
+- `Deepslate Tiles` to `Cracked Deepslate Tiles`
+- `Nether Bricks` to `Cracked Nether Bricks`
+- `Polished Blackstone Bricks` to `Cracked Polished Blackstone Bricks`
+- `Logs / Planks` (Wood) to `Basalt` (charred log appearance)
+- `Stone / Cobblestone` to `Tuff`
+- `Grass / Mycelium / Dirt` to `Coarse Dirt`
+- `Sand` to `Gravel`
+- Others to `Tuff`
 
 #### Gradual Expansion:
 The rift size and block density scale with the number of deaths at that checkpoint:

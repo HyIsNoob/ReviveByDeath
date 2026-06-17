@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0-beta.1
+
+### Changed
+
+- **Cutscene Parameters**: Updated Cutscene and default configurations for the cinematic death rewind cutscene (decreased cutscene ticks to 30 and increased frames to 52).
+
+## 0.3.0-beta.1
+
+### Fixed
+
+- **Rift Block Double-Conversion**: Fixed a bug where blocks under the player could be converted twice on subsequent deaths at the same checkpoint, which prevented them from being reverted properly back to their original states upon a cost reset.
+- **Forge Sleep Cost-Reset Alignment**: Realigned Forge's sleep reset mechanic with Fabric's behavior. Waking up from a successful sleep in a bed now properly resets the rewind cost and reverts rift blocks, whereas simply clicking/interacting with a bed to set a checkpoint (during the day/manually) will no longer reset the cost.
+
 ## 0.2.0-beta.1
 
 ### Added

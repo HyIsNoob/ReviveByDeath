@@ -29,8 +29,8 @@ public final class ReviveByDeathConfig {
 	public boolean resetCostOnDeath = true;
 	public boolean enableCutscene = true;
 	public int cutsceneIntroFadeTicks = 4;
-	public int cutsceneTicks = 32;
-	public int cutsceneFrames = 50;
+	public int cutsceneTicks = 30;
+	public int cutsceneFrames = 52;
 	public int returnEffectTicks = 14;
 	public int postReviveInvulnerabilityTicks = 60;
 	public int checkpointInitialCheckTicks = 10;

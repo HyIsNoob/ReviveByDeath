@@ -40,7 +40,9 @@ public final class ModCommands {
 								.executes(context -> giveBook(context.getSource().getPlayerOrException())))
 						.then(Commands.literal("reset_cost")
 								.requires(source -> source.hasPermission(2))
-								.executes(context -> resetCost(context.getSource().getPlayerOrException())))
+								.executes(context -> resetCost(context.getSource().getPlayerOrException()))
+								.then(Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+										.executes(context -> resetCost(context.getSource(), net.minecraft.commands.arguments.EntityArgument.getPlayers(context, "targets")))))
 						.then(Commands.literal("mode")
 								.requires(source -> source.hasPermission(2))
 								.then(Commands.literal("always")
@@ -109,5 +111,14 @@ public final class ModCommands {
 		RewindCostManager.reset(player);
 		player.sendSystemMessage(Component.literal("Rewind XP cost reset."));
 		return 1;
+	}
+
+	private static int resetCost(CommandSourceStack source, java.util.Collection<ServerPlayer> targets) {
+		for (ServerPlayer player : targets) {
+			RewindCostManager.reset(player);
+			player.sendSystemMessage(Component.literal("Rewind XP cost reset by administrator."));
+		}
+		source.sendSuccess(() -> Component.literal("Reset rewind cost for " + targets.size() + " player(s)."), true);
+		return targets.size();
 	}
 }

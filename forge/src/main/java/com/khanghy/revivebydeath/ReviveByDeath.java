@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingUseTotemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -93,8 +93,8 @@ public class ReviveByDeath {
 	}
 
 	@SubscribeEvent
-	public void onPlayerSleep(PlayerSleepInBedEvent event) {
-		RewindCostManager.onPlayerSleep(event);
+	public void onPlayerWakeUp(PlayerWakeUpEvent event) {
+		RewindCostManager.onPlayerWakeUp(event);
 	}
 
 	@Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)

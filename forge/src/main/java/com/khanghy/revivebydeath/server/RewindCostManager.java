@@ -1,7 +1,7 @@
 package com.khanghy.revivebydeath.server;
 
 import com.khanghy.revivebydeath.config.ReviveByDeathConfig;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -9,7 +9,7 @@ public final class RewindCostManager {
 	private RewindCostManager() {
 	}
 
-	public static void onPlayerSleep(PlayerSleepInBedEvent event) {
+	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
 		if (event.getEntity() instanceof ServerPlayer player && ReviveByDeathConfig.get().resetCostOnSleep) {
 			reset(player);
 		}

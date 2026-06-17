@@ -426,10 +426,10 @@ public final class CheckpointManager {
 						// If already tracked, check if player modified it
 						if (riftData.originalBlocks.containsKey(pos)) {
 							RiftRecord record = riftData.originalBlocks.get(pos);
-							if (!state.equals(record.placedState)) {
+							if (!state.is(record.placedState.getBlock())) {
 								riftData.originalBlocks.remove(pos);
-								continue;
 							}
+							continue;
 						}
 
 						if (!state.isAir() && !state.liquid() && state.isFaceSturdy(level, pos, Direction.UP)) {
